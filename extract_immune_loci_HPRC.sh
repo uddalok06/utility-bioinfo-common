@@ -11,6 +11,9 @@ threads=36
 # ============
 # Step 1. Decompress input if needed
 # ============
+
+samtools faidx ${input}
+
 if [[ "$input" == *.gz ]]; then
     echo "Decompressing $input ..."
     gunzip -f "$input"
@@ -28,7 +31,7 @@ makeblastdb -in "$input" -dbtype nucl -out subject_db
 # ============
 echo "Running blastn ..."
 blastn \
-    -query flank_sequences.fasta \ #immune loci specific flanking sequences
+    -query flank_sequences.fasta \ 
     -db subject_db \
     -outfmt "6 length pident nident mismatch gapopen gaps qseqid qstart qend qlen sseqid sstart send slen sstrand" \
     -num_threads "$threads" \
